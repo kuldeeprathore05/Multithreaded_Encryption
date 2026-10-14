@@ -29,10 +29,10 @@ vector<uint8_t> Crypto::computeChunkIV(uint64_t chunk_id) const {
     vector<uint8_t> iv = base_iv;  
     uint64_t offset = chunk_id*(CHUNK_SIZ/16); 
     uint64_t carry = offset; 
-    for (int i = IV_SIZ - 1; i >= 0 && carry > 0; --i) {
-        uint64_t sum = iv[i] + (carry & 0xFF);
-        iv[i] = sum & 0xFF;
-        carry = (carry >> 8) + (sum >> 8);
+    for (int i=IV_SIZ-1;i>=0 && carry >0;i--) {
+        uint64_t sum = iv[i] + (carry & 0xFF);       
+        iv[i] = sum & 0xFF;              // last eight bits only 
+        carry = (carry>>8) + (sum>>8);
     }
 
     return iv;

@@ -47,22 +47,17 @@ void Pipeline::run() {
         key = Crypto::deriveKey(password, salt);
     }
  
-    thread reader_thread([&]() {
+    jthread reader_thread([&]() {
         reader.run(in_queue, num_workers);
     });
     
-    vector<thread> workers;
+    vector<jthread> workers;
     for (int i = 0; i < num_workers;i++) { 
         workers.emplace_back(&Pipeline::workerTask, this, key, base_iv);
     } 
-    std::thread writer_thread([&]() {
+    jthread writer_thread([&]() {
         writer.run(out_queue, num_workers);
-    }); 
-    reader_thread.join();
-    for (auto& w : workers) {
-        w.join();
-    }
-    writer_thread.join();
+    });  
 
     cout<<"Pipeline sucessfully."<<endl;
 }
