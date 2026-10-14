@@ -21,7 +21,7 @@ pair<vector<uint8_t>,vector<uint8_t>> Filereader::readHeader(){
 
 }
 void Filereader::run(SharedQueue<Chunk>&out_queue,int num_workers){
-    uint8_t chunk_id = 0;
+    uint64_t chunk_id = 0;
     while(file){
         Chunk chunk;
         chunk.chunk_id = chunk_id++;
